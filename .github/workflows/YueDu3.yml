@@ -34,7 +34,7 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Upgrade pip
+      - name: Set up lanzou-api
         run: |
           pip install lanzou-api
 #          python -V
@@ -50,9 +50,7 @@ jobs:
           path: legado
 
       - name: Remove 18PlusList.txt
-        run: |
-          echo ${{ github.actor }}
-          rm -f $GITHUB_WORKSPACE/legado/app/src/main/assets/18PlusList.txt
+        run: rm -f $GITHUB_WORKSPACE/legado/app/src/main/assets/18PlusList.txt
 
       - name: Checkout private key
         uses: actions/checkout@v2
