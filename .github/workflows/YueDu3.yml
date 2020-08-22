@@ -3,13 +3,11 @@ name: Build YueDu 3
 # https://docs.github.com/cn/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets
 # https://docs.github.com/cn/actions/reference/events-that-trigger-workflows
 on:
-  push:
-    branch: [master]
   schedule:
     # 美国时间每周六9时5分（中国时间每周六17时5分）
     - cron: '5 9 * * 6'
-#  watch:
-#    types: [started]
+  watch:
+    types: [started]
 
 jobs:
   build:
@@ -90,7 +88,7 @@ jobs:
 
       - name: Update README.md
         run: |
-          sed "3c ## 当前最新版本:legado_google_3.${{ steps.current-time.outputs.formattedTime }}.apk" README.md -i
+          sed "3c ### 当前最新版本:legado_google_3.${{ steps.current-time.outputs.formattedTime }}.apk" README.md -i
           git config user.name  github-actions
           git config user.email github-actions@github.com
           git commit -a -m "update README.md"
