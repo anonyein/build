@@ -3,7 +3,8 @@ name: API test
 on:
   watch:
     types: [started]
-  push
+  push:
+    branches: [main]
 
 jobs:
   upload:
