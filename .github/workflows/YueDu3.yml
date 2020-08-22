@@ -93,3 +93,5 @@ jobs:
           git config user.email github-actions@github.com
           git commit -a -m "update README.md"
           git push
+        working-directory: legado
+
