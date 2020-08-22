@@ -1,0 +1,65 @@
+name: Flutter Ios Build
+
+on:
+  watch:
+    types: [started]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout this project
+        uses: actions/checkout@v2
+        with:
+          path: actions
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 12.x
+    
+      - name: Flutter SDK install
+        run: |
+          git clone https://github.com/flutter/flutter.git -b 1.20.0 _flutter
+          echo "::add-path::$GITHUB_WORKSPACE/_flutter/bin"
+
+      - name: Checkout flutter project
+        uses: actions/checkout@v2
+        with:
+          repository: mabDc/eso_from_gitlab
+          ref: b2c28d567f120d8121e4797ffd19e4811a0fd23f
+          token: ${{ secrets.ACCESS_TOKEN }}
+          path: eso
+
+      - name: Get flutter version
+        run: flutter --version
+        
+      - name: Fetch flutter dependence
+        run: |
+          cd $GITHUB_WORKSPACE/eso
+          mv -f pubspe.ios.yaml pubspec.yaml
+          flutter pub get
+        
+      - name: Select Xcode 11.4.1
+        run: sudo xcode-select -switch /Applications/Xcode_11.4.1.app
+ 
+      - name: Xcode option
+        run: xcodebuild -allowProvisioningUpdates
+ 
+      - name: Install pods
+        run: |
+          cd $GITHUB_WORKSPACE/eso/ios
+          pod install
+        
+      - name: Build ios
+        run: |
+          cd $GITHUB_WORKSPACE/eso
+          flutter build ios -v
+
+      - name: Upload flutter ios
+        uses: actions/upload-artifact@v2
+        with:
+          name: ESO_IOS
+          path: ${{ github.workspace }}/eso/build/ios/iphoneos/*.app/
+          if-no-files-found: error

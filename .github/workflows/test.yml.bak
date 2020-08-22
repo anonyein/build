@@ -1,0 +1,36 @@
+name: API test
+
+on:
+  watch:
+    types: [started]
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Set up Python 3.8
+#        uses: actions/setup-python@v2
+#        with:
+#          python-version: 3.8
+#
+#      - name: Upgrade pip
+#        run: |
+#          python -V
+#          python -m pip install --upgrade pip
+#          pip install lanzou-api
+
+      - name: Get current time
+        uses: 1466587594/current-time@v2
+        id: current-time
+        with:
+          format: YY.MMDDHH
+          utcOffset: "+08:00"
+
+      - run: echo ${{ steps.current-time.outputs.formattedTime }}
+
+#      - run: python ./.github/scripts/API_lanzou.py
+#        env:
+#          FOLDER_NAME: '阅读3'
+#          FILE_PATH: ${{ github.workspace }}/legado_google_3.20.${{ steps.current-time.outputs.formattedTime }}.apk

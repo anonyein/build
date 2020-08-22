@@ -1,0 +1,67 @@
+name: Build Legado
+
+# https://docs.github.com/cn/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets
+
+on:
+  watch:
+    types: [started]
+
+jobs:
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      # https://github.com/actions
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout this project
+        uses: actions/checkout@v2
+        with:
+          path: actions
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Checkout android project
+        uses: actions/checkout@v2
+        with:
+          repository: gedoor/legado
+          ref: 439997a1dcba17f45b17b84a9727ece99fbe12fa
+          fetch-depth: 1
+          path: legado
+
+      - name: Remove 18PlusList.txt
+        run: |        
+          echo "">legado/app/src/main/assets/18PlusList.txt
+
+      - name: Checkout private key
+        uses: actions/checkout@v2
+        with:
+          repository: Celeter/secrets
+          token: ${{ secrets.ACCESS_TOKEN }}
+          path: key
+
+      - name: Apk live together
+        run: |
+          sed "s/'.release'/'.releaseA'/" legado/app/build.gradle  -i
+          sed 's/.release/.releaseA/' legado/app/google-services.json -i
+   
+      - name: Decrypt large secret
+        run: bash actions/.github/scripts/decrypt_secret.sh
+        env:
+          LARGE_SECRET_PASSPHRASE: ${{ secrets.ANDROID_SECRET }}
+
+      - name: Build with Gradle
+        run: |
+          cd legado
+          chmod +x gradlew
+          ./gradlew assembleAppRelease
+
+      - name: Upload apk
+        uses: actions/upload-artifact@v2
+        with:
+          name: Legado_App
+          path: legado/app/build/outputs/apk/app/release/*.apk
+          if-no-files-found: error

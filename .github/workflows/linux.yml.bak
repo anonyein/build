@@ -1,0 +1,51 @@
+name: ESO Linux Build
+
+on:
+  watch:
+    types: [started]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout this project
+        uses: actions/checkout@v2
+        with:
+          path: actions
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 12.x
+
+      - name: Flutter SDK install
+        run: |
+          git clone https://github.com/flutter/flutter.git -b master _flutter
+          echo "::add-path::$GITHUB_WORKSPACE/_flutter/bin"
+
+      - name: Get flutter version
+        run: |
+          flutter --version
+          flutter config --enable-linux-desktop
+
+      - name: Checkout ESO project
+        uses: actions/checkout@v2
+        with:
+          repository: mabDc/eso_from_gitlab
+          ref: master
+          token: ${{ secrets.ACCESS_TOKEN }}
+          path: eso
+
+      - name: Build Linux
+        run: |
+          cd eso
+          flutter pub get
+          flutter build linux -v
+
+      - name: Upload apk
+        uses: actions/upload-artifact@v2
+        with:
+          name: ESO_LINUX
+          path: eso/build/linux/release/bundle
+          if-no-files-found: error
