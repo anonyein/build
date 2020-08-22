@@ -2,6 +2,8 @@ name: Build YueDu 2
 
 # https://docs.github.com/cn/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets
 # https://github.com/subosito/flutter-action
+# 脚本环境 https://docs.github.com/cn/actions/reference/workflow-syntax-for-github-actions
+# 设置系统环境变量 https://docs.github.com/cn/actions/reference/workflow-commands-for-github-actions
 
 on:
   push:
