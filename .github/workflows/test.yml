@@ -3,6 +3,7 @@ name: API test
 on:
   watch:
     types: [started]
+  push
 
 jobs:
   upload:
@@ -28,7 +29,14 @@ jobs:
           format: YY.MMDDHH
           utcOffset: "+08:00"
 
-      - run: echo ${{ steps.current-time.outputs.formattedTime }}
+      - name: use time
+        env:
+          TIME: "${{ steps.current-time.outputs.time }}"
+          R_TIME: "${{ steps.current-time.outputs.readableTime }}"
+          F_TIME: "${{ steps.current-time.outputs.formattedTime }}"
+          YEAR: "${{ steps.current-time.outputs.year }}"
+          DAY: "${{ steps.current-time.outputs.day }}"
+        run: echo $TIME $R_TIME $F_TIME $YEAR $DAY
 
 #      - run: python ./.github/scripts/API_lanzou.py
 #        env:
