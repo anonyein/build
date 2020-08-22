@@ -66,9 +66,9 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          cd $GITHUB_WORKSPACE/legado
           chmod +x gradlew
           ./gradlew assembleGoogleRelease
+        working-directory: legado
 
       - name: Get current time
         uses: 1466587594/current-time@v2
@@ -87,3 +87,11 @@ jobs:
           LANZOU_PSD: ${{ secrets.LANZOU_PSD }}
           FOLDER_NAME: '阅读3'
           FILE_PATH: ${{ github.workspace }}/legado_google_3.${{ steps.current-time.outputs.formattedTime }}.apk
+
+      - name: Update README.md
+        run: |
+          sed "3c ## 当前最新版本:legado_google_3.${{ steps.current-time.outputs.formattedTime }}.apk" README.md -i
+          git config user.name  github-actions
+          git config user.email github-actions@github.com
+          git commit -a -m "update README.md"
+          git push
