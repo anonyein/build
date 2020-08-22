@@ -29,6 +29,17 @@ jobs:
         with:
           java-version: 1.8
 
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Upgrade pip
+        run: |
+          pip install lanzou-api
+#          python -V
+#          python -m pip install --upgrade pip
+
       - name: Checkout android project
         uses: actions/checkout@v2
         with:
@@ -37,10 +48,6 @@ jobs:
           fetch-depth: 1
           token: ${{ secrets.ACCESS_TOKEN }}
           path: legado
-
-#      - name: clear [18PlusList.txt]
-#        run: |
-#          echo "">$GITHUB_WORKSPACE/legado/app/src/main/assets/18PlusList.txt
 
       - name: Remove 18PlusList.txt
         run: |
@@ -65,31 +72,12 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleGoogleRelease
 
-#      - name: Upload apk
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: YueDu3_Google
-#          path: ${{ github.workspace }}/legado/app/build/outputs/apk/google/release/*.apk
-#          if-no-files-found: error
-
-###############################################
       - name: Get current time
         uses: 1466587594/current-time@v2
         id: current-time
         with:
           format: YY.MMDDHH
           utcOffset: "+08:00"
-
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-
-      - name: Upgrade pip
-        run: |
-          python -V
-          python -m pip install --upgrade pip
-          pip install lanzou-api
 
       - name: Rename App
         run: mv -f ${{ github.workspace }}/legado/app/build/outputs/apk/google/release/*.apk ${{ github.workspace }}/legado_google_3.${{ steps.current-time.outputs.formattedTime }}.apk
