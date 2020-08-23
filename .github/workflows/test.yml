@@ -39,6 +39,10 @@ jobs:
           DAY: "${{ steps.current-time.outputs.day }}"
         run: echo $TIME $R_TIME $F_TIME $YEAR $DAY
 
+       - name: test
+         run: |
+           echo (date -u -d"+8 hour" "+%Y-%m-%d %H:%M:%S")
+
 #      - run: python ./.github/scripts/API_lanzou.py
 #        env:
 #          FOLDER_NAME: '阅读3'
