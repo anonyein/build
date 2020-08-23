@@ -69,7 +69,7 @@ jobs:
         working-directory: legado
 
       - name: Get current time
-        uses: Celeter/current-time@v2.0.0
+        uses: Celeter/current-time@v2
         id: current-time
         with:
           format: YY.MMDDHH
