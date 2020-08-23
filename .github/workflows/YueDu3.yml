@@ -69,7 +69,7 @@ jobs:
         working-directory: legado
 
       - name: Get current time
-        uses: 1466587594/current-time@v2
+        uses: Celeter/current-time@master
         id: current-time
         with:
           format: YY.MMDDHH
@@ -88,7 +88,8 @@ jobs:
 
       - name: Update README.md
         run: |
-          sed "3c ### 当前最新版本:legado_google_3.${{ steps.current-time.outputs.formattedTime }}.apk" README.md -i
+          sed "3c ### 当前最新版本: legado_google_3.${{ steps.current-time.outputs.formattedTime }}.apk" README.md -i
+          sed "4c ### 最近更新时间: ${{ steps.current-time.outputs.readableTime }}" README.md -i
           git config user.name  github-actions
           git config user.email github-actions@github.com
           git commit -m "update README.md" -a
