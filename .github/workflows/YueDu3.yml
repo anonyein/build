@@ -20,6 +20,7 @@ jobs:
       - name: Checkout this project
         uses: actions/checkout@v2
         with:
+          fetch-depth: 0
           path: actions
 
       - name: Set up JDK 1.8
