@@ -41,7 +41,7 @@ jobs:
 
       - name: test
         run: |
-          echo (date -u -d"+8 hour" "+%Y-%m-%d %H:%M:%S")
+          echo $(date -u -d"+8 hour" "+%Y-%m-%d %H:%M:%S")
 
 #      - run: python ./.github/scripts/API_lanzou.py
 #        env:
